@@ -59,6 +59,7 @@ mkdir sources
 cd sources
 git clone git://git.yoctoproject.org/poky -b kirkstone
 git clone https://git.yoctoproject.org/meta-raspberrypi/ -b kirkstone
+git clone git://git.openembedded.org/meta-openembedded -b kirkstone
 cd ..
 ```
 
@@ -87,8 +88,9 @@ source sources/poky/oe-init-build-env
 1. Create custom layer for the client application called `meta-client` and add it to bitbake layers
 
 ```bash
-bitbake-layers create-layer meta-client
-bitbake-layers add-layer meta-client
+cd build
+bitbake-layers create-layer ../meta-client
+bitbake-layers add-layer ../meta-client
 ```
 
 the `build/bblayers.conf` should look like the following:
@@ -112,7 +114,7 @@ BBLAYERS ?= " \
 2. Delete `recipes-example` directory and create `recipes-core` for image, and `recipes-packages` for custom packages
 
 ```bash
-cd meta-client
+cd ../meta-client
 rm -rf recipes-example
 mkdir recipes-core
 mkdir recipes-packages
@@ -213,10 +215,15 @@ runqemu qemux86-64
 
 ### Build for Raspberry Pi 4
 
-6. Add `meta-raspberrypi` layer manually or using bitbake
+6. Add `meta-raspberrypi`, `meta-oe`, `meta-multimedia`, `meta-networking`, and `meta-python` layer manually or using bitbake
 
 ```bash
-bitbake-layers add-layer sources/meta-raspberrypi
+cd build
+bitbake-layers add-layer ../sources/meta-raspberrypi
+bitbake-layers add-layer ../sources/meta-openembedded/meta-oe
+bitbake-layers add-layer ../sources/meta-openembedded/meta-python
+bitbake-layers add-layer ../sources/meta-openembedded/meta-multimedia
+bitbake-layers add-layer ../sources/meta-openembedded/meta-networking
 ```
 
 the `build/bblayers.conf` should look like the following:
@@ -230,16 +237,20 @@ BBPATH = "${TOPDIR}"
 BBFILES ?= ""
 
 BBLAYERS ?= " \
-  /{PROJECT_LOCATION}/client-server-yocto-project/sources/poky/meta \
-  /{PROJECT_LOCATION}/client-server-yocto-project/sources/poky/meta-poky \
-  /{PROJECT_LOCATION}/client-server-yocto-project/sources/poky/meta-yocto-bsp \
-  /{PROJECT_LOCATION}/client-server-yocto-project/sources/meta-raspberrypi \
-  /{PROJECT_LOCATION}/client-server-yocto-project/meta-client \
+  /home/darkknight/Projects/client-server-yocto-project/sources/poky/meta \
+  /home/darkknight/Projects/client-server-yocto-project/sources/poky/meta-poky \
+  /home/darkknight/Projects/client-server-yocto-project/sources/poky/meta-yocto-bsp \
+  /home/darkknight/Projects/client-server-yocto-project/sources/meta-raspberrypi \
+  /home/darkknight/Projects/client-server-yocto-project/meta-client \
+  /home/darkknight/Projects/client-server-yocto-project/sources/meta-openembedded/meta-oe \
+  /home/darkknight/Projects/client-server-yocto-project/sources/meta-openembedded/meta-python \
+  /home/darkknight/Projects/client-server-yocto-project/sources/meta-openembedded/meta-multimedia \
+  /home/darkknight/Projects/client-server-yocto-project/sources/meta-openembedded/meta-networking \
   "
 ```
 
 
-2. Set machine name in `build/local.conf` to `raspberrypi4`
+2. Set machine name in `build/local.conf` to `raspberrypi4-64`
 
 ```conf
 [..]
