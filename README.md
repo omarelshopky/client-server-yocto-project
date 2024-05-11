@@ -248,3 +248,43 @@ sudo dd if=tmp/deploy/images/raspberrypi4-64/core-image-sato-raspberrypi4-64.rpi
 ```
 
 > To check the SD card partition run `sudo fdisk -l` and replace x with your sd card partition id
+
+
+## Build the server application
+
+To build the server application you should have `cc` or `gcc` compiler, and before that don't forget to set the port on the code `SERVER_PORT`
+
+```bash
+cc server.c -o server
+```
+
+## Configure the client application after building the image
+
+The client application can be configured after building the custom image by using one of the following methods
+
+1. [Method 1] Modify the config file `/etc/client/client.conf` with the server info
+
+```bash
+echo "SERVER_IP 192.168.1.8" > /etc/client/client.conf
+echo "SERVER_PORT 1236" >> /etc/client/client.conf
+```
+
+the file content will be:
+
+```conf
+SERVER_IP 192.168.1.8
+SERVER_PORT 1236
+```
+
+1. [Method 2] Use client options
+
+```bash
+client --ip 192.168.1.8 --port 1236
+```
+
+2. Restart the client service to close the current connection, and open new one with the new config
+
+```bash
+service client_service stop
+service client_service start
+```
