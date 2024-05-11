@@ -1,0 +1,28 @@
+
+case "$1" in
+  start)
+    echo -n "Starting client application..."
+    client &
+    echo "done"
+    ;;
+  stop)
+    echo -n "Stopping client application..."
+    pid=$(pgrep -f client)
+    if [ -n "$pid" ]; then
+        kill $pid
+        echo "done"
+    else
+        echo "Process not found"
+    fi
+    ;;
+  restart)
+    $0 stop
+    $0 start
+    ;;
+  *)
+    echo "Usage: client_service { start | stop | restart }" >&2
+    exit 1
+    ;;
+esac
+
+exit 0
