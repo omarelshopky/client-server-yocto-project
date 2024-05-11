@@ -1,5 +1,22 @@
 # Client-Server Image for Yocto Project
 
+## Table of Content
+
+- [Client-Server Image for Yocto Project](#client-server-image-for-yocto-project)
+  - [Table of Content](#table-of-content)
+  - [Project Description](#project-description)
+  - [Creation Steps](#creation-steps)
+    - [Setup the Environment](#setup-the-environment)
+    - [Create Custom Layer](#create-custom-layer)
+    - [Build for Qemu](#build-for-qemu)
+    - [Build for Raspberry Pi 4](#build-for-raspberry-pi-4)
+  - [Build the server application](#build-the-server-application)
+  - [Configure the client application after building the image](#configure-the-client-application-after-building-the-image)
+
+
+___
+
+## Project Description
 Project has four phases:
 
 1. Download Build Yocto Project
@@ -22,6 +39,7 @@ Project has four phases:
 4. (Bonus) Build a full embedded linux image using yocto for raspberry pi board (or
 any high end board ) and boot image on this board.
 
+_____
 
 ## Creation Steps
 
@@ -249,6 +267,7 @@ sudo dd if=tmp/deploy/images/raspberrypi4-64/core-image-sato-raspberrypi4-64.rpi
 
 > To check the SD card partition run `sudo fdisk -l` and replace x with your sd card partition id
 
+___
 
 ## Build the server application
 
@@ -257,6 +276,8 @@ To build the server application you should have `cc` or `gcc` compiler, and befo
 ```bash
 cc server.c -o server
 ```
+
+___
 
 ## Configure the client application after building the image
 
